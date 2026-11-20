@@ -58,7 +58,8 @@ const profile = await getEntry('profile', 'profile');
         </nav>
       </header>
 
-      <main id="main-content" tabindex="-1">
+      <main>
+        <a id="main-content" class="main-content-target" href="#main-content" tabindex="-1" aria-label="Début du contenu principal"></a>
         <slot />
       </main>
 
@@ -106,32 +107,38 @@ const profile = await getEntry('profile', 'profile');
 <style is:global>
   :root {
     color-scheme: dark;
-    --paper: #17181d;
-    --ink: #f5f5f7;
-    --muted: #b7bac4;
-    --line: #383b45;
-    --accent: #8d99ff;
-    --accent-soft: #292c40;
-    --accent-cool: #c6cad5;
-    --warm: #e8ca67;
-    --panel: #202127;
-    --panel-strong: #292b33;
-    --page-wash: #20202b;
+    --paper: #17171f;
+    --ink: #f5f4fa;
+    --muted: #c1bacb;
+    --line: #3f364b;
+    --accent: #0083ef;
+    --heading-secondary: #f08acb;
+    --accent-violet: #bd6dff;
+    --accent-cyan: #45d8cd;
+    --accent-soft: #292e5b;
+    --accent-cool: #c6a9ff;
+    --warm: #bd6dff;
+    --panel: #20212d;
+    --panel-strong: #2b2541;
+    --page-wash: #23203c;
   }
 
   :root[data-theme='light'] {
     color-scheme: light;
     --paper: #ffffff;
     --ink: #202127;
-    --muted: #5d6069;
-    --line: #e1e3e8;
-    --accent: #3b4de8;
-    --accent-soft: #eff0ff;
-    --accent-cool: #515967;
-    --warm: #9a7615;
-    --panel: #f7f8fa;
-    --panel-strong: #f0f1f4;
-    --page-wash: #f1f3ff;
+    --muted: #615a68;
+    --line: #e5dce9;
+    --accent: #2d4fdb;
+    --heading-secondary: #a53d80;
+    --accent-violet: #783ac5;
+    --accent-cyan: #176f82;
+    --accent-soft: #ecebff;
+    --accent-cool: #59459e;
+    --warm: #783ac5;
+    --panel: #f7f6fc;
+    --panel-strong: #efeafa;
+    --page-wash: #f3efff;
   }
 
   *, *::before, *::after { box-sizing: border-box; }
@@ -147,6 +154,8 @@ const profile = await getEntry('profile', 'profile');
     -webkit-font-smoothing: antialiased;
     transition: background-color 200ms ease, color 200ms ease;
   }
+  h1, h2 { color: var(--accent); }
+  h3, h4 { color: var(--heading-secondary); }
   a { color: inherit; text-decoration: none; }
   a:focus-visible, button:focus-visible { outline: 3px solid var(--warm); outline-offset: 3px; }
   .skip-link {
@@ -156,12 +165,13 @@ const profile = await getEntry('profile', 'profile');
     left: 12px;
     padding: 10px 14px;
     border-radius: 6px;
-    background: var(--accent);
+    background: linear-gradient(135deg, var(--accent), var(--accent-violet) 58%, var(--accent-cyan));
     color: var(--paper);
     font-weight: 700;
     transform: translateY(-160%);
   }
   .skip-link.is-visible { transform: translateY(0); }
+  .main-content-target { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
   .site-shell { width: min(1160px, calc(100% - 64px)); margin: 0 auto; }
   .topbar {
     min-height: 84px;
@@ -177,8 +187,8 @@ const profile = await getEntry('profile', 'profile');
     aspect-ratio: 1;
     place-items: center;
     border-radius: 8px;
-    background: var(--accent-soft);
-    color: var(--accent);
+    background: var(--accent);
+    color: #fff;
     font-family: 'DM Sans', sans-serif;
     font-size: 12px;
     letter-spacing: 0;
@@ -194,14 +204,14 @@ const profile = await getEntry('profile', 'profile');
     place-items: center;
     border: 1px solid var(--line);
     border-radius: 50%;
-    background: var(--panel);
-    color: var(--ink);
+    background: var(--accent-soft);
+    color: var(--accent);
     cursor: pointer;
     font-size: 19px;
     line-height: 1;
     transition: background-color 160ms ease, border-color 160ms ease;
   }
-  .theme-toggle:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .theme-toggle:hover { border-color: transparent; background: linear-gradient(135deg, var(--accent), var(--accent-violet) 58%, var(--accent-cyan)); color: #fff; }
   .site-footer {
     display: flex;
     justify-content: space-between;
@@ -214,9 +224,19 @@ const profile = await getEntry('profile', 'profile');
   .site-footer a { color: var(--ink); }
   .eyebrow, .section-kicker {
     margin: 0;
-    color: var(--accent);
+    color: var(--heading-secondary);
     font-size: 13px;
     font-weight: 600;
+  }
+  .eyebrow::before, .section-kicker::before {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin: 0 9px 1px 0;
+    border-radius: 2px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-violet) 58%, var(--accent-cyan));
+    content: '';
+    transform: rotate(45deg);
   }
   .section-heading { margin: 0; font-size: 30px; font-weight: 600; line-height: 1.3; }
   .text-link { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; }
