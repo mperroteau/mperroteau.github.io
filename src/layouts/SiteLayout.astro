@@ -110,17 +110,17 @@ const profile = await getEntry('profile', 'profile');
     --paper: #17171f;
     --ink: #f5f4fa;
     --muted: #c1bacb;
-    --line: #3f364b;
-    --accent: #0083ef;
-    --heading-secondary: #f08acb;
-    --accent-violet: #bd6dff;
-    --accent-cyan: #45d8cd;
-    --accent-soft: #292e5b;
-    --accent-cool: #c6a9ff;
-    --warm: #bd6dff;
-    --panel: #20212d;
-    --panel-strong: #2b2541;
-    --page-wash: #23203c;
+    --line: #40364c;
+    --accent: #45a8e8;
+    --heading-secondary: #e2b5ef;
+    --accent-pink: #ff4d9a;
+    --accent-cool: var(--heading-secondary);
+    --gradient-color: #079dd9;
+    --accent-soft: #34243f;
+    --warm: var(--accent-pink);
+    --panel: #221b2b;
+    --panel-strong: #39233a;
+    --page-wash: #2c1c3b;
   }
 
   :root[data-theme='light'] {
@@ -128,17 +128,17 @@ const profile = await getEntry('profile', 'profile');
     --paper: #ffffff;
     --ink: #202127;
     --muted: #615a68;
-    --line: #e5dce9;
-    --accent: #2d4fdb;
-    --heading-secondary: #a53d80;
-    --accent-violet: #783ac5;
-    --accent-cyan: #176f82;
-    --accent-soft: #ecebff;
-    --accent-cool: #59459e;
-    --warm: #783ac5;
-    --panel: #f7f6fc;
-    --panel-strong: #efeafa;
-    --page-wash: #f3efff;
+    --line: #e3d8e6;
+    --accent: #0678bf;
+    --heading-secondary: #4c265f;
+    --accent-pink: #f20775;
+    --accent-cool: var(--heading-secondary);
+    --gradient-color: #079dd9;
+    --accent-soft: #e8f4fb;
+    --warm: var(--accent-pink);
+    --panel: #f6f4fa;
+    --panel-strong: #f0eaf5;
+    --page-wash: #f2f4ff;
   }
 
   *, *::before, *::after { box-sizing: border-box; }
@@ -165,7 +165,7 @@ const profile = await getEntry('profile', 'profile');
     left: 12px;
     padding: 10px 14px;
     border-radius: 6px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-violet) 58%, var(--accent-cyan));
+    background: var(--accent);
     color: var(--paper);
     font-weight: 700;
     transform: translateY(-160%);
@@ -211,7 +211,7 @@ const profile = await getEntry('profile', 'profile');
     line-height: 1;
     transition: background-color 160ms ease, border-color 160ms ease;
   }
-  .theme-toggle:hover { border-color: transparent; background: linear-gradient(135deg, var(--accent), var(--accent-violet) 58%, var(--accent-cyan)); color: #fff; }
+  .theme-toggle:hover { border-color: transparent; background: var(--accent-pink); color: #fff; }
   .site-footer {
     display: flex;
     justify-content: space-between;
@@ -234,7 +234,7 @@ const profile = await getEntry('profile', 'profile');
     height: 7px;
     margin: 0 9px 1px 0;
     border-radius: 2px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-violet) 58%, var(--accent-cyan));
+    background: var(--accent-cool);
     content: '';
     transform: rotate(45deg);
   }
