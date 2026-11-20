@@ -14,7 +14,7 @@ npm run dev
 ## Personnaliser
 
 - Modifier `src/content/profile/profile.md` : le frontmatter YAML contient l’identité, le métier, la ville, les expériences, la formation, les compétences et les hobbies ; le corps Markdown sert à rédiger la présentation.
-- Pour afficher un portrait, ajouter une image dans `public/images/` et définir son chemin, par exemple `portrait: /images/portrait.jpg`, dans le frontmatter du profil.
+- Le portrait actuel est une image de démonstration Unsplash dans `public/images/portrait-placeholder.jpg`. Pour le remplacer, ajouter une image dans `public/images/` puis changer le champ `portrait` dans le frontmatter du profil.
 - Détailler un poste avec `description` et une liste `details` dans son entrée `experience`.
 - Ajouter un fichier `.md` dans `src/content/articles/` pour publier un article. Renseigner son titre, sa date, sa catégorie, son résumé et son temps de lecture dans le frontmatter YAML.
 - Le thème sombre est activé par défaut ; le bouton en haut de page permet de passer en clair. Le choix est conservé dans le navigateur.

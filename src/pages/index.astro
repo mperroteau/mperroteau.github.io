@@ -5,10 +5,6 @@ import { getCollection, getEntry, render } from 'astro:content';
 const profile = await getEntry('profile', 'profile');
 const { Content: ProfileIntro } = await render(profile);
 const hasProfileIntro = Boolean(profile.body?.trim());
-const hasExperience = profile.data.experience.length > 0;
-const hasEducation = profile.data.education.length > 0;
-const hasSkills = profile.data.skills.length > 0;
-const hasHobbies = profile.data.hobbies.length > 0;
 const latestArticles = (await getCollection('articles'))
   .sort((a, b) => b.data.date.localeCompare(a.data.date))
   .slice(0, 1);
@@ -33,9 +29,16 @@ function formatDate(date: string) {
       <p class="hero-role">{profile.data.role}</p>
       <p class="hero-location">{profile.data.location}</p>
     </div>
-    <div class="hero-visual" aria-hidden="true">
+    <div class="hero-visual" aria-hidden={profile.data.portrait ? undefined : 'true'}>
       {profile.data.portrait ? (
-        <img class="hero-photo" src={profile.data.portrait} alt="" />
+        <>
+          <img
+            class="hero-photo"
+            src={profile.data.portrait}
+            alt={profile.data.portrait === '/images/portrait-placeholder.jpg' ? 'Portrait de démonstration, à remplacer' : `Portrait de ${profile.data.name}`}
+          />
+          {profile.data.portrait === '/images/portrait-placeholder.jpg' && <span class="photo-caption">Photo de démonstration</span>}
+        </>
       ) : (
         <span class="visual-name">{profile.data.initials}</span>
       )}
@@ -49,67 +52,61 @@ function formatDate(date: string) {
     </section>
   )}
 
-  {(hasExperience || hasEducation || hasSkills) && (
-    <section class="resume-section" id="parcours" aria-labelledby="resume-title">
-      <div class="section-topline">
-        <div><p class="section-kicker">Parcours</p><h2 class="section-heading" id="resume-title">Expériences et formation</h2></div>
-      </div>
-      <div class:list={['resume-grid', { 'resume-grid-single': !hasExperience || (!hasEducation && !hasSkills) }]}>
-        {hasExperience && (
-          <div class="experience-block">
-            <h3 class="subsection-heading">Expériences</h3>
-            <div class="timeline">
-              {profile.data.experience.map((item) => (
-                <article class="timeline-item">
-                  <p class="timeline-date">{item.period}</p>
-                  <div>
-                    <h4>{item.title}</h4>
-                    <p class="timeline-place">{item.organization}</p>
-                    {item.description && <p class="timeline-description">{item.description}</p>}
-                    {item.details.length > 0 && (
-                      <ul class="experience-details">
-                        {item.details.map((detail) => <li>{detail}</li>)}
-                      </ul>
-                    )}
-                  </div>
-                </article>
-              ))}
-            </div>
+  <section class="resume-section" id="parcours" aria-labelledby="resume-title">
+    <div class="section-topline">
+      <div><p class="section-kicker">Parcours</p><h2 class="section-heading" id="resume-title">Expériences et formation</h2></div>
+    </div>
+    <div class="resume-grid">
+      <div class="experience-block">
+        <h3 class="subsection-heading">Expériences</h3>
+        {profile.data.experience.length > 0 ? (
+          <div class="timeline">
+            {profile.data.experience.map((item) => (
+              <article class="timeline-item">
+                <p class="timeline-date">{item.period}</p>
+                <div>
+                  <h4>{item.title}</h4>
+                  <p class="timeline-place">{item.organization}</p>
+                  {item.description && <p class="timeline-description">{item.description}</p>}
+                  {item.details.length > 0 && (
+                    <ul class="experience-details">
+                      {item.details.map((detail) => <li>{detail}</li>)}
+                    </ul>
+                  )}
+                </div>
+              </article>
+            ))}
           </div>
-        )}
-        {(hasEducation || hasSkills) && (
-          <div class="resume-side">
-            {hasEducation && (
-              <section class="education-block" aria-labelledby="education-title">
-                <h3 class="subsection-heading" id="education-title">Formation</h3>
-                {profile.data.education.map((item) => (
-                  <article class="education-item">
-                    <p class="side-date">{item.period}</p>
-                    <h4>{item.title}</h4>
-                    <p class="timeline-place">{item.organization}</p>
-                    {item.description && <p class="timeline-description">{item.description}</p>}
-                  </article>
-                ))}
-              </section>
-            )}
-            {hasSkills && (
-              <section class="skills-block" aria-labelledby="skills-title">
-                <h3 class="subsection-heading" id="skills-title">Compétences</h3>
-                <ul class="skill-list">{profile.data.skills.map((skill) => <li>{skill}</li>)}</ul>
-              </section>
-            )}
-          </div>
-        )}
+        ) : <p class="empty-state">À compléter</p>}
       </div>
-    </section>
-  )}
+      <div class="resume-side">
+        <section class="education-block" aria-labelledby="education-title">
+          <h3 class="subsection-heading" id="education-title">Formation</h3>
+          {profile.data.education.length > 0 ? profile.data.education.map((item) => (
+            <article class="education-item">
+              <p class="side-date">{item.period}</p>
+              <h4>{item.title}</h4>
+              <p class="timeline-place">{item.organization}</p>
+              {item.description && <p class="timeline-description">{item.description}</p>}
+            </article>
+          )) : <p class="empty-state">À compléter</p>}
+        </section>
+        <section class="skills-block" aria-labelledby="skills-title">
+          <h3 class="subsection-heading" id="skills-title">Compétences</h3>
+          {profile.data.skills.length > 0 ? (
+            <ul class="skill-list">{profile.data.skills.map((skill) => <li>{skill}</li>)}</ul>
+          ) : <p class="empty-state">À compléter</p>}
+        </section>
+      </div>
+    </div>
+  </section>
 
-  {hasHobbies && (
-    <section class="hobbies-section" aria-labelledby="hobbies-title">
-      <div><p class="section-kicker">En dehors du travail</p><h2 class="section-heading" id="hobbies-title">Centres d’intérêt</h2></div>
+  <section class="hobbies-section" aria-labelledby="hobbies-title">
+    <div><p class="section-kicker">En dehors du travail</p><h2 class="section-heading" id="hobbies-title">Centres d’intérêt</h2></div>
+    {profile.data.hobbies.length > 0 ? (
       <ul class="hobby-list">{profile.data.hobbies.map((hobby) => <li>{hobby}</li>)}</ul>
-    </section>
-  )}
+    ) : <p class="empty-state">À compléter</p>}
+  </section>
 
   <section class="journal-section" aria-labelledby="articles-title">
     <div class="section-topline">
@@ -131,15 +128,14 @@ function formatDate(date: string) {
 </SiteLayout>
 
 <style>
-  .hero { display: grid; min-height: 500px; grid-template-columns: 1fr 0.9fr; align-items: center; gap: 72px; padding: 60px 0 72px; }
+  .hero { display: grid; min-height: 360px; grid-template-columns: 1.15fr 0.85fr; align-items: center; gap: 56px; padding: 34px 0 42px; }
   .hero-copy { max-width: 590px; animation: arrive 500ms ease both; }
-  .hero h1 { margin: 12px 0; font-size: 68px; font-weight: 700; line-height: 1.15; }
-  .hero-role { margin: 0; color: var(--accent); font-size: 20px; font-weight: 600; }
-  .hero-location { margin: 16px 0 0; color: var(--muted); font-size: 15px; }
-  .hero-visual { position: relative; display: flex; min-height: 390px; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; border-bottom: 4px solid var(--warm); background: linear-gradient(135deg, var(--panel), var(--panel-strong) 72%, var(--accent-soft)); animation: arrive 650ms 80ms ease both; }
-  .hero-visual::before { position: absolute; top: 0; right: 12%; width: 1px; height: 100%; background: var(--line); content: ''; transform: rotate(22deg); }
+  .hero h1 { margin: 8px 0; font-size: 54px; font-weight: 700; line-height: 1.15; }
+  .hero-role { margin: 0; color: var(--accent); font-size: 18px; font-weight: 600; }
+  .hero-location { margin: 10px 0 0; color: var(--muted); font-size: 14px; }
+  .hero-visual { position: relative; justify-self: end; width: min(100%, 380px); height: 280px; overflow: hidden; border: 1px solid var(--line); border-bottom: 3px solid var(--warm); border-radius: 10px; background-color: var(--panel); animation: arrive 650ms 80ms ease both; }
   .hero-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .hero-visual:has(.hero-photo)::before { display: none; }
+  .photo-caption { position: absolute; right: 12px; bottom: 12px; padding: 5px 9px; border-radius: 4px; background: #17181de8; color: #fff; font-size: 11px; }
   .visual-name { z-index: 1; color: var(--accent); font-size: 150px; font-weight: 700; line-height: 1; }
   .intro-band { display: grid; grid-template-columns: 190px 1fr; gap: 48px; align-items: start; padding: 38px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
   .intro-band .section-kicker { padding-top: 5px; }
@@ -156,6 +152,7 @@ function formatDate(date: string) {
   .timeline-item h4, .education-item h4 { margin: 0; font-size: 16px; font-weight: 700; }
   .timeline-place { margin: 2px 0 8px; color: var(--muted); font-size: 14px; }
   .timeline-description { max-width: 440px; margin: 0; color: var(--muted); font-size: 14px; }
+  .empty-state { margin: 0; color: var(--muted); font-size: 14px; }
   .experience-details { margin: 10px 0 0; padding-left: 20px; color: var(--muted); font-size: 14px; }
   .experience-details li + li { margin-top: 5px; }
   .resume-side { display: grid; grid-template-columns: 1fr; gap: 32px; }
@@ -180,7 +177,7 @@ function formatDate(date: string) {
   @keyframes arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
   @media (max-width: 760px) {
     .hero { min-height: 0; grid-template-columns: 1fr 0.85fr; gap: 32px; padding: 55px 0 60px; }
-    .hero-visual { min-height: 300px; }
+    .hero-visual { justify-self: stretch; width: 100%; height: 260px; }
     .visual-name { font-size: 120px; }
     .hero h1 { font-size: 54px; }
     .intro-band { grid-template-columns: 140px 1fr; gap: 28px; }
@@ -191,10 +188,10 @@ function formatDate(date: string) {
     .hobbies-section { grid-template-columns: 1fr; gap: 14px; }
   }
   @media (max-width: 480px) {
-    .hero { grid-template-columns: 1fr; gap: 30px; padding: 48px 0 52px; }
+    .hero { grid-template-columns: 1fr; gap: 18px; padding: 30px 0 36px; }
     .hero h1 { font-size: 42px; }
     .hero-role { font-size: 18px; }
-    .hero-visual { min-height: 250px; }
+    .hero-visual { height: 230px; }
     .visual-name { font-size: 90px; }
     .intro-band { grid-template-columns: 1fr; gap: 12px; padding: 28px 0; }
     .profile-intro p { font-size: 16px; }

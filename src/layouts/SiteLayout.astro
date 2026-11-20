@@ -20,7 +20,7 @@ const profile = await getEntry('profile', 'profile');
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#1b2030" />
+    <meta name="theme-color" content="#17181d" />
     <script is:inline>
       let savedTheme = null;
       try {
@@ -91,7 +91,7 @@ const profile = await getEntry('profile', 'profile');
         themeButton?.setAttribute('aria-label', `Thème ${theme === 'dark' ? 'sombre' : 'clair'}`);
         themeButton?.setAttribute('aria-pressed', String(theme === 'dark'));
         themeButton?.setAttribute('title', `Passer au thème ${nextTheme}`);
-        themeColor?.setAttribute('content', theme === 'dark' ? '#1b2030' : '#f8f5ed');
+        themeColor?.setAttribute('content', theme === 'dark' ? '#17181d' : '#ffffff');
         if (themeIcon) themeIcon.textContent = theme === 'dark' ? '☼' : '☾';
       }
 
@@ -106,37 +106,40 @@ const profile = await getEntry('profile', 'profile');
 <style is:global>
   :root {
     color-scheme: dark;
-    --paper: #1b2030;
-    --ink: #fbfaf6;
-    --muted: #c2c7d2;
-    --line: #41495d;
-    --accent: #78a6ff;
-    --accent-soft: #293d68;
-    --accent-cool: #f2ce68;
-    --warm: #f2ce68;
-    --panel: #252e44;
-    --panel-strong: #35435e;
+    --paper: #17181d;
+    --ink: #f5f5f7;
+    --muted: #b7bac4;
+    --line: #383b45;
+    --accent: #8d99ff;
+    --accent-soft: #292c40;
+    --accent-cool: #c6cad5;
+    --warm: #e8ca67;
+    --panel: #202127;
+    --panel-strong: #292b33;
+    --page-wash: #20202b;
   }
 
   :root[data-theme='light'] {
     color-scheme: light;
-    --paper: #f8f5ed;
-    --ink: #242a36;
-    --muted: #586171;
-    --line: #ddd6c9;
-    --accent: #285bc4;
-    --accent-soft: #e2ebfb;
-    --accent-cool: #765809;
-    --warm: #916c13;
-    --panel: #eaf0fb;
-    --panel-strong: #f0e8d8;
+    --paper: #ffffff;
+    --ink: #202127;
+    --muted: #5d6069;
+    --line: #e1e3e8;
+    --accent: #3b4de8;
+    --accent-soft: #eff0ff;
+    --accent-cool: #515967;
+    --warm: #9a7615;
+    --panel: #f7f8fa;
+    --panel-strong: #f0f1f4;
+    --page-wash: #f1f3ff;
   }
 
   *, *::before, *::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
     margin: 0;
-    background: var(--paper);
+    background: linear-gradient(125deg, var(--paper) 0%, var(--page-wash) 55%, var(--paper) 100%);
+    background-attachment: fixed;
     color: var(--ink);
     font-family: 'DM Sans', sans-serif;
     font-size: 16px;
