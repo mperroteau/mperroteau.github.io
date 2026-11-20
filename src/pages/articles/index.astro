@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+const articles = (await getCollection('articles')).sort((a, b) => b.data.date.localeCompare(a.data.date));
+
+function formatDate(date: string) {
+  return new Intl.DateTimeFormat('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(`${date}T12:00:00`));
+}
+---
+
+<SiteLayout title="Articles — Prénom Nom" description="Articles et publications de Prénom Nom.">
+  <section class="page-intro">
+    <p class="eyebrow">Publications</p>
+    <h1>Articles</h1>
+    <p>Réflexions, retours d’expérience et sujets qui méritent d’être partagés.</p>
+  </section>
+  <section class="article-list" aria-label="Articles">
+    {articles.map((article) => (
+      <article class="article-row">
+        <div class="article-meta"><time datetime={article.data.date}>{formatDate(article.data.date)}</time><span>{article.data.category} · {article.data.readingTime}</span></div>
+        <a href={`/articles/${article.id}/`}><h2>{article.data.title}</h2><p>{article.data.excerpt}</p></a>
+        <span class="article-arrow" aria-hidden="true">↗</span>
+      </article>
+    ))}
+  </section>
+</SiteLayout>

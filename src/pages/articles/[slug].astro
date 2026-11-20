@@ -1,0 +1,31 @@
+---
+import { getCollection, render } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  return articles.map((article) => ({ params: { slug: article.id }, props: { article } }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+
+function formatDate(date: string) {
+  return new Intl.DateTimeFormat('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(`${date}T12:00:00`));
+}
+---
+
+<SiteLayout title={`${article.data.title} — Prénom Nom`} description={article.data.excerpt}>
+  <article class="article-page">
+    <a class="back-link" href="/articles/">← Tous les articles</a>
+    <p class="eyebrow">{article.data.category} · {article.data.readingTime} · {formatDate(article.data.date)}</p>
+    <h1>{article.data.title}</h1>
+    <p class="article-deck">{article.data.excerpt}</p>
+    <div class="article-copy"><Content /></div>
+    <div class="article-end"><a class="text-link" href="/articles/">Voir tous les articles <span aria-hidden="true">↗</span></a></div>
+  </article>
+</SiteLayout>
